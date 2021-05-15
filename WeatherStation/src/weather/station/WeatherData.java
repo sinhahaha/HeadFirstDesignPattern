@@ -1,31 +1,20 @@
 package weather.station;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeatherData implements Subject {
+public class WeatherData {
 
-    private final List<Observer> observers = new ArrayList<>();
+    private final PropertyChangeSupport support = new PropertyChangeSupport(this);
 
     private float temperature;
     private float humidity;
     private float pressure;
 
-    @Override
-    public void registerObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    @Override
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObserver() {
-        for (Observer observer : observers) {
-            observer.update(temperature, humidity, pressure);
-        }
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        this.support.addPropertyChangeListener(listener);
     }
 
     public void setMeasurementValues(float temperature, float humidity, float pressure) {
@@ -33,6 +22,18 @@ public class WeatherData implements Subject {
         this.humidity = humidity;
         this.pressure = pressure;
 
-        notifyObserver();
+        support.firePropertyChange("weather", null, this);
+    }
+
+    public float getTemperature() {
+        return temperature;
+    }
+
+    public float getHumidity() {
+        return humidity;
+    }
+
+    public float getPressure() {
+        return pressure;
     }
 }

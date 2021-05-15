@@ -5,7 +5,8 @@ public class WeatherStation {
         WeatherData data = new WeatherData();
         data.setMeasurementValues(20, 78, 4);
 
-        CurrentWeatherMonitor monitor = new CurrentWeatherMonitor(data);
+        CurrentWeatherMonitor monitor = new CurrentWeatherMonitor();
+        data.addPropertyChangeListener(monitor);
         monitor.show();
 
         data.setMeasurementValues(30, 60, 5);
